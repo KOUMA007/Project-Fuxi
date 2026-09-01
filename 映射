@@ -1,0 +1,195 @@
+以下是无极OS 知识库内与八卦相关的全部可跑逻辑与文档真源整理（按「真源 → 引擎 → 配置 → 治理 → 对照志 → API/UI → 间接引用 → 历史档案」）。
+
+一、核心符号真源（L0–L1 · 三爻 bit）
+唯一 bit 表（初→上，1=阳 0=阴）在 scripts/icaa/yi_dayan.py：
+
+卦	符号	bits	大衍和	老少
+乾   ☰   1,1,1    9    老阳
+坤   ☷   0,0,0    6    老阴
+震   ☳   1,0,0    7    少阳
+坎   ☵   0,1,0    7    少阳
+艮   ☶   0,0,1    7    少阳
+巽   ☴   0,1,1    8    少阴
+离   ☲   1,0,1    8    少阴
+兑   ☱   1,1,0    8    少阴
+关键常量/函数：TRIGRAM_BITS · BITS_TO_GLYPH · NAME_TO_GLYPH · GLYPH_TO_NAME · dayan_sum · classify · minority_rule · flip_yao · parse_path · path_profile · path_delta · commit_path · bridge_payload
+
+易错点（已修正）：兑 = [1,1,0]，不是巽的 [0,1,1]；乾初爻变 → 巽（非兑）。
+
+二、宪法与 Agent 行为（治理层）
+文件	                                                      八卦相关内容
+00_Governance/constitution.md §三                      八卦路径：乾规划 / 兑对话 / 离检索 / 震执行 / 巽编排 / 坎风险 / 艮止审 / 坤归档；无乾不开震，震后必艮
+.cursorrules                                           三表法 → 八卦路径 → 二十八宿看板；bagua_route.py
+00_Governance/ontology_values.json                     「三表 → 八卦 → 二十八宿」世界观
+00_Governance/decrees/BAGUA_CHAIN_PROTOCOL.md          八卦长链：☰→☴→☲→☳→☶→☷ 阶段映射
+00_Governance/decrees/DECREE_P12_BAGUA_CHAIN_DRAFT.md  P12 全链草案（候旨）
+00_Governance/decrees/YI_DAYAN_STATE_MACHINE.md        大衍老少 / 以少为贵 / 变爻差量
+00_Governance/decrees/DECREE_YI_INFO_THEORY_BRIDGE.md  爻=bit；变爻=差量；禁超压缩玄学
+00_Governance/decrees/DECREE_CLASSIC_CODE_ATLAS.md     全息公式以八卦为中层：阴阳 ⊂ 八卦 ⊂ …
+00_Governance/decrees/LOCAL_LLM_IDE_BRIDGE.md          bagua_route.py 八卦→Ollama 模型档
+00_Governance/decrees/dispatches/*八卦路径*.json       中书起草「识别任务并生成八卦路径」派单记录
+
+三、可执行引擎（Python · 按职责）
+1. 大衍 / 路径 / 变爻（主核）
+scripts/icaa/yi_dayan.py
+大衍求和、老少分类、路径剖面、变爻翻转、路径差量、状态提交
+状态文件：00_Governance/yi_dayan_state.json
+CLI：sum · classify · table · path · delta · commit · bridge · self-test
+
+2. 八卦长链编排
+scripts/icaa/bagua_chain.py
+STAGE_MAP：八卦 → PLAN/STAGE/VALIDATE/EXECUTE/RISK/REVIEW/ARCHIVE + 部门
+profile(path)：大衍风险 + 阶段表 + 变爻差量
+run()：转发 start_mission（骨架，P12 全链候旨）
+默认路径：乾震艮坤；全路径：乾巽离震艮坤
+
+3. 八卦 → 本地模型路由
+scripts/icaa/bagua_route.py
+卦 → local_fast(1.5b) / local_coder(7b)
+读 30_Control_Plane/bagua_map.json
+CLI：python scripts/icaa/bagua_route.py --prefer ollama --path 乾震艮坤
+
+4. 象数 / 六十四卦（本·互·变）
+scripts/icaa/xiang_shu_engine.py
+from_wuxing()：五行+阴阳 → 后天八卦 bits（互锁 yi_dayan）
+infer()：6 爻 → 本卦/互卦/变卦
+verify_wuxing()：上下卦五行生克
+NLP 取象：parse()（关键词→五行→八卦）
+KB：30_Control_Plane/hexagram_knowledge_base.json（64 卦工程释义）
+
+5. 后天八卦 × 五行（道教整合层）
+配置真源：30_Control_Plane/houtian_wuxing_map.json
+八卦方位/季节/五行/阴阳/道教身象/dynamics
+from_wuxing 映射表 + 生克 sheng/ke
+被 xiang_shu_engine · classic_code_atlas · fuxi_kernel 引用
+
+6. 洛书九宫配卦
+scripts/icaa/luoshu_engine.py
+PALACE_GUA：1坎 2坤 3震 4巽 5中 6乾 7兑 8艮 9离
+幻方校验 / 缺格补全
+
+7. 河图配卦
+scripts/icaa/hetu_engine.py
+生数→成数各配卦：北水坎、南火离、东木震巽、西金兑乾、中土坤艮
+
+8. 神农 × 八卦槽位
+scripts/icaa/shennong_engine.py + 30_Control_Plane/shennong_feature_schema.json
+维度：bagua = 空间/表里状态槽位
+wuxing_bagua：木→震巽、火→离、土→坤艮、金→乾兑、水→坎
+dual_layer() → bagua_slots；五色→脏腑→卦
+
+9. 伏羲诸子统一管线
+scripts/icaa/fuxi_kernel.py
+五行→八卦 bits → 桥接 xiang_shu_engine.infer()
+映射表：30_Control_Plane/fuxi_schools_map.json（每学派 bagua_role）
+
+10. 全息栈索引
+scripts/icaa/holographic_bridge.py + 30_Control_Plane/holographic_canon.json
+L1 层「八卦」= 空间拓扑槽位 / 状态空间
+
+11. 意图路由（自然语言→卦）
+scripts/icaa/intent_router.py
+关键词 → 乾/震/艮/… 卦象
+
+12. 其他含八卦语义的脚本
+脚本	                                    八卦相关逻辑
+cmd_server.py                            命令闸：艮拷问、坎回溯、震开干、默认路径 ☰→☷→☳→☶
+start_mission.py                         默认 trigram_path: ☰→☳→☲→☶
+atlas_stack_verify.py                    烟测 /api/bagua/dayan · /api/xiang-shu
+observatory_inventory.py                 pulse → /api/bagua/dayan
+observatory_optimize.py                  烟测 /api/bagua/dayan · /api/bagua/chain
+ide_bridge_launch.py                     启动 IDE 桥时走八卦路由
+soul_nutrition.py                        坎回溯算子
+Logic_Primitives/yao_state_machine.py    爻状态机迁移（坎回溯）
+interface_hub.py                         战役维度坎/震
+bing_kanban.py / fc_lean_gate.py         「开震」门禁语义
+campaigns/Battle_Refactor_V1.json        路径 ☰→巽→震→艮
+ateliers/registry.json                   工坊挂卦：乾/离/艮
+
+四、机读配置（JSON 真源）
+文件	                                          内容
+30_Control_Plane/bagua_map.json                 卦→动作(plan/execute/…)、卦→大衍老少、卦→模型档、预设路径
+30_Control_Plane/houtian_wuxing_map.json        后天八卦全表 + 五行互映射
+30_Control_Plane/hexagram_knowledge_base.json   64 卦 upper|lower → 工程释义
+30_Control_Plane/shennong_feature_schema.json   五行↔八卦槽 + 五色→卦
+30_Control_Plane/holographic_canon.json         栈 L1=八卦
+30_Control_Plane/fuxi_schools_map.json          诸子→八卦角色
+00_Governance/yi_dayan_state.json
+已提交八卦路径状态
+
+五、典章对照志（E01–E17 中八卦相关）
+ID	        文件        	            主题
+E01    E01_yao_delta.md               爻变差量（bit 层）
+E03    E03_bagua_chain.md             八卦链协议
+E07    E07_daoist_bagua_wuxing.md     道教以卦统行
+E08    E08_wuxing_bagua_align.md      五与八维度对齐
+E09    E09_xiang_shu_engine.md        本互变象数引擎
+E10    E10_xiang_shu_apply_verify.md  象数应用验证
+E13    E13_luoshu.md                  洛书九宫配卦
+E14    E14_shennong_wuxing_bagua.md   百草×五行×八卦双层
+E15    E15_hetu.md                    河图配卦
+E16    E16_holographic_stack.md       全息图 L1 八卦
+E17    E17_fuxi_kernel.md             诸子→八卦管线
+讨论样稿：DISCUSS_POST_01（易×信息论）· 02（道教配五行）· 04（双层拓扑）· 05（河洛全息）· 06（诸子管线）
+
+六、HTTP API 与观星台 UI
+API（cmd_server.py · :5000）
+端点	                        模块	          功能
+GET /api/bagua/dayan          yi_dayan        大衍表/路径剖/差量/bridge
+POST /api/bagua/dayan/commit  yi_dayan        提交路径态
+GET /api/xiang-shu            xiang_shu       map/infer/parse/verify
+GET /api/bagua/chain          bagua_chain     路径 profile
+POST /api/bagua/chain/run     bagua_chain     链式 run
+GET /api/luoshu               luoshu          九宫配卦
+GET /api/hetu                 hetu            河图配卦
+GET /api/fuxi                 fuxi_kernel     诸子管线（含本互变）
+
+Dashboard #pulse 按钮
+大衍表 · 剖路径 · 变爻差量 · 信息论桥 · 本互变推演 · 后天配五行 · 象数验证 · 洛书 · 河图 · 全息图 · 伏羲诸子
+
+七、逻辑依赖关系（总图）
+L0 阴阳 bit
+L1 八卦槽位
+L2 路径/编排
+L3 扩展配卦
+治理/UI
+yi_dayan.pyTRIGRAM_BITS
+houtian_wuxing_map.json
+bagua_map.json
+xiang_shu_engine.py
+hexagram_knowledge_base.json
+bagua_chain.py
+bagua_route.py
+intent_router.py
+luoshu_engine.py
+hetu_engine.py
+shennong_engine.py
+fuxi_kernel.py
+constitution.md §三
+cmd_server /api/bagua/*
+dashboard.html #pulse
+八、常用复现命令
+# 大衍 / 路径 / 变爻
+python scripts/icaa/yi_dayan.py table
+python scripts/icaa/yi_dayan.py path "☰→☳→艮→☷"
+python scripts/icaa/yi_dayan.py delta --from "☰→☷" --to "☰→☳→艮"
+python scripts/icaa/yi_dayan.py flip 乾 --pos 0    # 初爻变 → 巽
+# 八卦链 / 模型路由
+python scripts/icaa/bagua_chain.py profile --path 乾震艮坤
+python scripts/icaa/bagua_route.py --path 乾震艮坤
+# 象数六十四卦
+python scripts/icaa/xiang_shu_engine.py from-wuxing 水 --polarity yin
+python scripts/icaa/xiang_shu_engine.py infer --yao 0,1,0,1,0,1 --move 4
+# 配卦扩展
+python scripts/icaa/luoshu_engine.py grid
+python scripts/icaa/hetu_engine.py lookup 水
+python scripts/icaa/shennong_engine.py dual 麻黄
+python scripts/icaa/fuxi_kernel.py run --demo overload
+# 联合验证
+python scripts/icaa/atlas_stack_verify.py --api
+九、历史蓝图 / 档案（非运行真源，供考据）
+20_Data_Plane/vault/20260829-无极AI八卦系统-蓝图.md（及 _unsorted 副本）
+10_Infrastructure/chronicle/W1-八卦验收记录.md
+20_Data_Plane/vault/_unsorted/无极-ICAA-Bagua迭代升级-蓝图索引.md
+十、一句话总括
+八卦在本库 = 三爻 bit 真源（yi_dayan）+ 后天五行槽位（houtian_wuxing_map）+ Agent 路径宪法（乾→…→艮/坤）+ 六十四卦推演（xiang_shu）+ 河洛/神农/诸子配卦扩展；所有可跑逻辑最终可追溯到 TRIGRAM_BITS 与 houtian 两表。
