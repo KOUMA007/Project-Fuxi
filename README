@@ -5,18 +5,20 @@ Fuxi is a next-generation development environment built on the principles of Cyb
 By bridging the gap between high-performance Rust execution and Python-based logic orchestration, Fuxi creates a "Code Space" that maintains logical consistency (True OT) and system homeostasis (Cybernetic Governance) even under the most extreme concurrency.核心哲学 (Core Philosophy)
 
 The architecture follows the evolution from Taiji (the Single Source of Truth) to Liangyi (Binary Logic/OT Entanglement), organized by the Wu Xing (Five Elements of Functional Modules), and regulated by Trigrams (Governance States). Fuxi does not execute commands—it governs code evolution.Key Capabilities (Capability Matrix)
-Capability	Architectural Layer	Implementation	Governance Primitive
-Strict Consistency	Native OT Engine (Rust)	True OT Matrix	Tai (泰): Balanced State
-High Concurrency	Buffer-Worker (Actors)	Asynchronous Sequencer	Flow (行云流水): Event Ring
-Self-Healing	Snapshot Forest + Oplog	ACID Transactional Recovery	Fou Ji Tai Lai (否极泰来): Fault Fusion
-Semantic Cognition	Tree-sitter + AST Indexer	Incremental AST Parsing	Ming Cha Qiu Hao (明察秋毫): Semantic Slicing
-System Robustness	Governance Controller	Trigram State Machine (FSM)	Kang Long You Hui (亢龙有悔): Throttling
-Engineering View	Global Dependency Graph	Symbol Registry + Edges	Jie Zhi Yi Xu (解之以序): Dependency Governance
+Capability	         Architectural Layer	       Implementation	              Governance Primitive
+Strict Consistency   Native OT Engine (Rust)     True OT Matrix	              Tai (泰): Balanced State
+High Concurrency	   Buffer-Worker (Actors)	     Asynchronous Sequencer	      Flow (行云流水): Event Ring
+Self-Healing	       Snapshot Forest + Oplog	   ACID Transactional Recovery	Fou Ji Tai Lai (否极泰来): Fault Fusion
+Semantic Cognition	 Tree-sitter + AST Indexer	 Incremental AST Parsing	    Ming Cha Qiu Hao (明察秋毫): Semantic Slicing
+System Robustness	   Governance Controller	     Trigram State Machine (FSM)	Kang Long You Hui (亢龙有悔): Throttling
+Engineering View	   Global Dependency Graph	   Symbol Registry + Edges	    Jie Zhi Yi Xu (解之以序): Dependency Governance
 Architectural Overview
+
 Brain (Governance Layer): Python Orchestrator managing FSM-based governance policies.
 Heart (Compute Engine): Rust Native Engine handling high-frequency OT transformations and incremental AST parsing.
 Nervous System (Neural-Net Indexer): Persistent Symbol Graph (via sled) for sub-millisecond dependency resolution.
 Consciousness (Observability): Real-time WebSocket Telemetry bus for visualizing "Hexagram States."
+
 The Trigram Governance Model
 
 The system monitors its own "Entropy" and "Conflict Rates," transitioning between states to ensure system integrity:
@@ -24,6 +26,7 @@ The system monitors its own "Entropy" and "Conflict Rates," transitioning betwee
 [Zhen - 震]: High Load / Processing / Throttling required.
 [Kan - 坎]: Blocked / Dependency Indexing in progress.
 [Gu - 蛊]: Fault / Logic Divergence / Triggering Rollback.
+
 Quick Start1. Build and Package
 
 Fuxi uses Taskfile for unified automation:
