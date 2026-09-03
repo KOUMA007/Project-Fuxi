@@ -1,3 +1,52 @@
+伏羲 (Fuxi) IDE：控制论驱动的代码自治空间
+
+伏羲 (Fuxi) 是一款基于 控制论 (Cybernetics) 与 三爻治理 (Trigram Governance) 理念构建的下一代开发环境。它不仅是一个代码编辑器，更是一个具备“自我感知、逻辑一致、故障自愈”能力的智能代码自治实体。
+
+通过将 Python 的高层编排能力与 Rust 的高性能 Native 底座结合，伏羲 IDE 实现了极高并发下的“零拷贝”协作，是专为 AI 辅助编程与超大规模重构打造的生产力底座。核心哲学
+
+伏羲 IDE 的运行逻辑遵循一套动态的自然律动：“始于规矩，行于 OT；否极则退，亢龙知止；解之以序，鼎新以智”。我们不再通过被动的指令驱动系统，而是通过治理逻辑使系统在复杂性熵增中保持有序。能力矩阵 (Capability Matrix)
+能力属性	   架构层级	                      物理实现	            治理原语 (Governance Primitive)
+强一致性	   Native OT Engine (Rust)	      True OT 转换矩阵	    泰 (Tài)：维持稳态平衡
+高吞吐并发	 Buffer-Worker (Actor Model)	  异步 Sequencer 队列	  行云流水：去中心化调度
+自愈能力     Snapshot Forest + Oplog	      ACID事务性恢复	      否极泰来：熔断与回滚
+语义感知	   Tree-sitter + Symbol Indexer	  增量 AST 解析	        明察秋毫：语义切片提取
+系统稳健性   Governance Controller	        三爻变易 FSM	        亢龙有悔：负载退避削峰
+工程视角	   Dependency Graph	              符号注册表 + 邻接边	  解之以序：依赖关系的治理
+架构概览
+大脑 (Governance Layer)：Python Orchestrator，负责路由分发、状态机决策与故障熔断。
+心脏 (Compute Core)：Rust Native Engine，负责 OT 转换、AST 增量解析，以及高性能内存管理。
+神经系统 (Neural-Net Indexer)：持久化符号索引 (Sled + Graph)，支持毫秒级全项目符号查找。
+全息视觉 (Observability)：实时 WebSocket 遥测总线，将 IDE 内部卦象状态可视化投射至仪表盘。
+治理卦象体系 (Governance Matrix)
+
+系统通过实时监控内部“熵值 (Entropy)”，自动演化为不同的治理卦象：
+【乾】(Qian): 系统健康，算力充沛，响应速率 < 2ms。
+【震】(Zhen): 负载激增，自动触发削峰填谷 (Throttling)，确保 UI 响应不阻塞。
+【坎】(Kan): 依赖索引重组中，AI 上下文查询暂挂。
+【蛊】(Gu): 逻辑冲突检测，自动执行快照回滚并进入诊断模式。
+快速开始1. 编译与打包
+
+伏羲 IDE 采用 Taskfile 管理自动化流水线：
+# 铸造 Native 计算引擎
+task build-core
+
+# 生成通信契约
+task gen-proto
+
+# 封箱发布 (构建单一二进制文件)
+task package
+2. 启动
+# 启动 IDE
+./dist/fuxi-ide
+
+# 查看实时治理仪表盘
+
+工程宣言
+
+伏羲 IDE 是一次架构上的“降维打击”。它拒绝了传统编辑器线性的调用链，转而追求“圆心环状”的共振架构。每一行代码的变化都在 OT 引擎中纠缠，每一次重构都在治理控制器的呵护下完成。
+
+
+
 Fuxi IDE: Cybernetic Autonomous Code Space
 
 Fuxi is a next-generation development environment built on the principles of Cybernetics (Control Theory) and Trigram Governance (I Ching logic). It is not merely a code editor; it is a self-governing, autonomous, and self-healing intelligent system.
